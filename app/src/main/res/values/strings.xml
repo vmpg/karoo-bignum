@@ -189,4 +189,8 @@
     <string name="df_sunset_desc">Time of sunset where you are, h:mm.</string>
     <string name="df_battery">Battery</string>
     <string name="df_battery_desc">Karoo battery charge remaining.</string>
+    <string name="df_tpms_front">TPMS - Front</string>
+    <string name="df_tpms_front_desc">Native Karoo front tire pressure in bar.</string>
+    <string name="df_tpms_rear">TPMS - Rear</string>
+    <string name="df_tpms_rear_desc">Native Karoo rear tire pressure in bar.</string>
 </resources>

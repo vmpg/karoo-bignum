@@ -6,6 +6,18 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Each entry here should match the `releaseNotes` field in `app/manifest.json`, which is what the
 Karoo shows in its own update flow.
 
+## [1.4.1-tpms-test1] - 2026-10-06
+
+### Added
+
+- Fork test build with native Karoo **TPMS - Front** and **TPMS - Rear** fields. Both read the
+  named tire-pressure value from the multi-value stream and display the native kPa reading in
+  bar. They are available as ordinary fields and in **HUD - Two Fields**.
+- Debug builds log changed pressure, target, range and alarm-enabled values for a short
+  normal/low/normal K3 capture. karoo-ext 1.1.9 does not expose a current low-pressure alarm
+  flag, so this build does not invent a threshold or colour an inferred warning.
+- A separate GitHub Actions workflow builds a signed release APK from repository secrets.
+
 ## [1.4.1] - 2026-09-19
 
 ### Fixed
@@ -259,7 +271,8 @@ First public release.
 - The rounded card behind each field is drawn by Karoo. On a ride page it does not clip the
   extension's view to that card, so the fill rounds its own corners to match.
 
-[Unreleased]: https://github.com/smartycoder/karoo-bignum/compare/v1.4.1...HEAD
+[Unreleased]: https://github.com/vmpg/karoo-bignum/compare/v1.4.1-tpms-test1...HEAD
+[1.4.1-tpms-test1]: https://github.com/vmpg/karoo-bignum/releases/tag/v1.4.1-tpms-test1
 [1.4.1]: https://github.com/smartycoder/karoo-bignum/releases/tag/v1.4.1
 [1.4.0]: https://github.com/smartycoder/karoo-bignum/releases/tag/v1.4.0
 [1.3.1]: https://github.com/smartycoder/karoo-bignum/releases/tag/v1.3.1

@@ -17,6 +17,7 @@ import io.smartycoder.bignum.streamDataFlow
 import io.hammerhead.karooext.KarooSystemService
 import io.hammerhead.karooext.extension.DataTypeImpl
 import io.hammerhead.karooext.internal.ViewEmitter
+import io.hammerhead.karooext.models.DataPoint
 import io.hammerhead.karooext.models.StreamState
 import io.hammerhead.karooext.models.UpdateGraphicConfig
 import io.hammerhead.karooext.models.UserProfile
@@ -80,6 +81,9 @@ abstract class BaseNumericField(
      * flag drawn as a distance.
      */
     open val valueField: String? = null
+
+    /** Observe a complete native sample before its display value is selected. */
+    protected open fun onDataPoint(point: DataPoint) = Unit
 
     /**
      * Whether the raised-tail setting applies to this field. Off for a wall clock: "14:35" would
@@ -216,6 +220,7 @@ abstract class BaseNumericField(
         testMode && demoInTestMode -> previewValue
         preview && state !is StreamState.Streaming -> previewValue
         state is StreamState.Streaming -> state.dataPoint.let { point ->
+            onDataPoint(point)
             valueField?.let { point.values[it] } ?: point.singleValue
         }
         else -> null

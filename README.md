@@ -159,14 +159,14 @@ count towards, so it stays hidden rather than showing squares that never light.
 
 ### Karoo 3 (Companion app)
 
-1. Open the [latest release](https://github.com/smartycoder/karoo-bignum/releases/latest) in your
+1. Open the [latest release](https://github.com/vmpg/karoo-bignum/releases/latest) in your
    phone's browser.
 2. Long-press the `app-release.apk` link and share it with the Hammerhead Companion app.
 3. Your Karoo shows an install prompt — press **Install**.
 
 ### Karoo 2 (manual sideload)
 
-1. Download `app-release.apk` from the [latest release](https://github.com/smartycoder/karoo-bignum/releases/latest).
+1. Download `app-release.apk` from the [latest release](https://github.com/vmpg/karoo-bignum/releases/latest).
 2. Set up your Karoo for sideloading — DC Rainmaker has a
    [step-by-step guide](https://www.dcrainmaker.com/2021/02/how-to-sideload-android-apps-on-your-hammerhead-karoo-1-karoo-2.html).
 3. `adb install app-release.apk`
