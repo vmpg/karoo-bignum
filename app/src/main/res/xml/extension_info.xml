@@ -94,6 +94,10 @@
     <DataType displayName="@string/df_temp"      graphical="true" icon="@drawable/ic_temp" typeId="temp"        description="@string/df_temp_desc"/>
     <DataType displayName="@string/df_battery" graphical="true" icon="@drawable/ic_battery" typeId="battery" description="@string/df_battery_desc"/>
 
+    <!-- Native Karoo TPMS -->
+    <DataType displayName="@string/df_tpms_front" graphical="true" icon="@drawable/ic_tire_pressure" typeId="tirePressureFront" description="@string/df_tpms_front_desc"/>
+    <DataType displayName="@string/df_tpms_rear" graphical="true" icon="@drawable/ic_tire_pressure" typeId="tirePressureRear" description="@string/df_tpms_rear_desc"/>
+
     <!-- Composite -->
     <DataType displayName="@string/df_hud" graphical="true" icon="@drawable/ic_bignum" typeId="hud" description="@string/df_hud_desc"/>
 </ExtensionInfo>

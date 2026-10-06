@@ -100,6 +100,12 @@ class FormattersTest {
         assertEquals("73" to "°F", Formatters.temperature(23.0, imperial))
     }
 
+    // ── tire pressure (native input kPa; this fork always displays bar) ────
+    @Test fun `tire pressure converts kPa to one-decimal bar`() {
+        assertEquals("5.2" to "bar", Formatters.tirePressure(520.0, metric))
+        assertEquals("5.2" to "bar", Formatters.tirePressure(520.0, imperial))
+    }
+
     // ── time (input MILLISECONDS) ──────────────────────────────────────────
     @Test fun `time below 1 hour drops the leading hour`() {
         assertEquals("5:30" to "", Formatters.time(330_000.0, null))

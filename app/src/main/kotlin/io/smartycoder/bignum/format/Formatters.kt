@@ -73,6 +73,10 @@ object Formatters {
         }
     }
 
+    /** Native Karoo tire-pressure streams carry kPa; this fork intentionally displays bar. */
+    val tirePressure: (Double, PreferredUnit?) -> Pair<String, String> =
+        { v, _ -> "%.1f".fmt(v / 100.0) to "bar" }
+
     /**
      * h:mm:ss from one hour, m:ss below it.
      *
