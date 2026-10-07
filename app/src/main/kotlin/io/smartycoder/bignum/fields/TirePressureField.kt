@@ -24,7 +24,9 @@ class TirePressureField(
     override val iconRes = R.drawable.ic_tire_pressure
     override val zoneKind: ZoneKind? = null
     override val format: (Double, PreferredUnit?) -> Pair<String, String> = Formatters.tirePressure
-    override val widthTemplate = "00.0"
+    override val widthTemplate = "0.00"
+    override val raisedTailAllowed = false
+    override val unitBelow = "bar"
 
     // A TPMS point has four values, so singleValue is not a safe way to select the pressure.
     override val valueField = DataType.Field.TIRE_PRESSURE
@@ -38,21 +40,27 @@ class TirePressureField(
             // This deliberately logs only changes and only in debug builds. karoo-ext 1.1.9 does
             // not expose an active low-pressure flag, so one normal/low/normal device capture is
             // needed before warning colour can be implemented without guessing.
-            Log.d(TAG, "$label native values: $current")
+            Log.d(
+                TAG,
+                "$label pressureRaw=${current.pressureRaw} " +
+                    "pressureBar=${current.pressureRaw?.let { Formatters.tirePressure(it, null).first }} " +
+                    "target=${current.targetRaw} range=${current.rangeRaw} " +
+                    "alarmEnabled=${current.alarmEnabled}",
+            )
         }
     }
 
     internal data class TpmsValues(
-        val pressureKpa: Double?,
-        val targetKpa: Double?,
-        val rangeKpa: Double?,
+        val pressureRaw: Double?,
+        val targetRaw: Double?,
+        val rangeRaw: Double?,
         val alarmEnabled: Double?,
     ) {
         companion object {
             fun from(point: DataPoint) = TpmsValues(
-                pressureKpa = point.values[DataType.Field.TIRE_PRESSURE],
-                targetKpa = point.values[DataType.Field.TIRE_PRESSURE_TARGET],
-                rangeKpa = point.values[DataType.Field.TIRE_PRESSURE_RANGE],
+                pressureRaw = point.values[DataType.Field.TIRE_PRESSURE],
+                targetRaw = point.values[DataType.Field.TIRE_PRESSURE_TARGET],
+                rangeRaw = point.values[DataType.Field.TIRE_PRESSURE_RANGE],
                 alarmEnabled = point.values[DataType.Field.TIRE_PRESSURE_ALARM_ENABLED],
             )
         }

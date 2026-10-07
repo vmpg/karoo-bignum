@@ -150,9 +150,9 @@ object FieldCatalog {
             SimpleField(extension, "battery", karoo, DataType.Type.BATTERY_PERCENT, "BATTERY", R.drawable.ic_battery, Formatters.percent, previewValue = 64.0),
 
             // Native Karoo TPMS. These explicitly select TIRE_PRESSURE from the four-value point;
-            // TirePressureField also converts the native kPa reading to this fork's fixed bar UI.
-            TirePressureField(extension, "tirePressureFront", karoo, DataType.Type.TIRE_PRESSURE_FRONT, "TPMS F", previewValue = 520.0),
-            TirePressureField(extension, "tirePressureRear", karoo, DataType.Type.TIRE_PRESSURE_REAR, "TPMS R", previewValue = 540.0),
+            // TirePressureField converts the native tenths-of-kPa reading to fixed two-decimal bar.
+            TirePressureField(extension, "tirePressureFront", karoo, DataType.Type.TIRE_PRESSURE_FRONT, "FRONT", previewValue = 3670.0),
+            TirePressureField(extension, "tirePressureRear", karoo, DataType.Type.TIRE_PRESSURE_REAR, "REAR", previewValue = 3810.0),
         )
     }
 }

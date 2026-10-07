@@ -7,6 +7,7 @@ import io.hammerhead.karooext.models.UserProfile.PreferredUnit.UnitType
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
 import org.junit.Test
+import java.util.Locale
 import java.util.TimeZone
 
 class FormattersTest {
@@ -100,10 +101,23 @@ class FormattersTest {
         assertEquals("73" to "°F", Formatters.temperature(23.0, imperial))
     }
 
-    // ── tire pressure (native input kPa; this fork always displays bar) ────
-    @Test fun `tire pressure converts kPa to one-decimal bar`() {
-        assertEquals("5.2" to "bar", Formatters.tirePressure(520.0, metric))
-        assertEquals("5.2" to "bar", Formatters.tirePressure(520.0, imperial))
+    // ── tire pressure (native input tenths of kPa; always displayed in bar) ─
+    @Test fun `tire pressure converts raw tenths of kPa to two-decimal bar`() {
+        withLocale(Locale.US) {
+            assertEquals("3.67" to "bar", Formatters.tirePressure(3670.0, metric))
+            assertEquals("3.80" to "bar", Formatters.tirePressure(3800.0, imperial))
+            assertEquals("4.00" to "bar", Formatters.tirePressure(4000.0, metric))
+            assertEquals("2.22" to "bar", Formatters.tirePressure(2220.0, metric))
+        }
+    }
+
+    @Test fun `tire pressure follows the device decimal separator`() {
+        withLocale(Locale.GERMANY) {
+            assertEquals("3,67" to "bar", Formatters.tirePressure(3670.0, metric))
+            assertEquals("3,80" to "bar", Formatters.tirePressure(3800.0, metric))
+            assertEquals("4,00" to "bar", Formatters.tirePressure(4000.0, metric))
+            assertEquals("2,22" to "bar", Formatters.tirePressure(2220.0, metric))
+        }
     }
 
     // ── time (input MILLISECONDS) ──────────────────────────────────────────
@@ -270,6 +284,12 @@ class FormattersTest {
     }
 
     private fun withUtc(body: () -> Unit) = withZone("UTC", body)
+
+    private fun withLocale(locale: Locale, body: () -> Unit) {
+        val previous = Locale.getDefault()
+        Locale.setDefault(locale)
+        try { body() } finally { Locale.setDefault(previous) }
+    }
 
     private fun withZone(id: String, body: () -> Unit) {
         val previous = TimeZone.getDefault()
