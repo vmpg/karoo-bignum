@@ -45,6 +45,31 @@
         android:scaleType="fitEnd"
         android:contentDescription="@null"/>
 
+    <!-- Optional small unit line. GONE for every existing field; TPMS enables one aligned copy. -->
+    <ImageView android:id="@+id/unit_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|start"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:contentDescription="@null"/>
+
+    <ImageView android:id="@+id/unit_center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|center_horizontal"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:contentDescription="@null"/>
+
+    <ImageView android:id="@+id/unit_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:contentDescription="@null"/>
+
     <ImageView android:id="@+id/header_start"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

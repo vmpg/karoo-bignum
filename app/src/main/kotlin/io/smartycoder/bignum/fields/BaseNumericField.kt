@@ -90,6 +90,8 @@ abstract class BaseNumericField(
      * split into a big "14" and a small "35", which is how a stopwatch reads, not a time of day.
      */
     open val raisedTailAllowed: Boolean = true
+    /** Optional small line below the value. Null keeps the existing two-line field unchanged. */
+    open val unitBelow: String? = null
     abstract val zoneKind: ZoneKind?
     abstract val format: (Double, PreferredUnit?) -> Pair<String, String>
     open val previewValue: Double = 0.0
@@ -193,6 +195,7 @@ abstract class BaseNumericField(
             roundCorners = !inSlot,
             headerAlignment = headerAlignment,
             iconOnlyHeader = iconOnlyHeader,
+            unitBelow = unitBelow,
         )
     }
 

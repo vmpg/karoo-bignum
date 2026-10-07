@@ -73,9 +73,13 @@ object Formatters {
         }
     }
 
-    /** Native Karoo tire-pressure streams carry kPa; this fork intentionally displays bar. */
+    /**
+     * Native Karoo TPMS is streamed in tenths of a kPa: 3810 means 381.0 kPa, or 3.81 bar.
+     * Unlike the other compact BigNum values, pressure always keeps two decimals and follows
+     * the device locale for its visible decimal separator.
+     */
     val tirePressure: (Double, PreferredUnit?) -> Pair<String, String> =
-        { v, _ -> "%.1f".fmt(v / 100.0) to "bar" }
+        { v, _ -> String.format(Locale.getDefault(), "%.2f", v / 1000.0) to "bar" }
 
     /**
      * h:mm:ss from one hour, m:ss below it.

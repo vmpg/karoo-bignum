@@ -26,7 +26,8 @@ import io.hammerhead.karooext.models.ViewConfig.Alignment
 /**
  * Renders a field -- its icon, short label and primary number -- to a Bitmap in the typeface
  * the rider picked, and pushes it into the RemoteViews via setImageViewBitmap.
- * The unit suffix (km/h, W, ...) is intentionally not drawn.
+ * Unit suffixes (km/h, W, ...) are intentionally not drawn unless a field explicitly requests
+ * the small separate line below the value.
  *
  * The header is ours rather than Karoo's: the field sends UpdateGraphicConfig(showHeader =
  * false), which buys the whole tile and lets the label be a short form ("PWR 5s") instead of
@@ -64,6 +65,10 @@ object FieldRenderer {
     // The header is drawn at a fixed dp size into its own unscaled ImageView, so it comes out
     // the same on every field size instead of riding along with the number's scale factor.
     private const val LABEL_HEIGHT_DP = 11.07f
+
+    /** Ink height of the optional unit line. Kept below the header so the number owns the tile. */
+    private const val UNIT_HEIGHT_DP = 7f
+    private const val UNIT_TOP_GAP_DP = 1f
 
     // What LABEL_HEIGHT_DP is measured against. A capital with flat top and bottom: "O" or "S"
     // would carry the overshoot rounded glyphs are drawn with, and any label's own ink carries
@@ -165,9 +170,13 @@ object FieldRenderer {
 
     private val headerCache = ConcurrentHashMap<HeaderKey, Bitmap>()
 
+    private data class UnitKey(val text: String, val color: Int)
+    private val unitCache = ConcurrentHashMap<UnitKey, Bitmap>()
+
     // IntArray, so iterating allocates neither a list nor boxed ids.
     private val BITMAP_IDS = intArrayOf(R.id.bitmap_start, R.id.bitmap_center, R.id.bitmap_end)
     private val HEADER_IDS = intArrayOf(R.id.header_start, R.id.header_center, R.id.header_end)
+    private val UNIT_IDS = intArrayOf(R.id.unit_start, R.id.unit_center, R.id.unit_end)
 
     /**
      * Typeface per setting. Building one is a native call that allocates, and render() runs on
@@ -366,6 +375,8 @@ object FieldRenderer {
          * the same height, so it buys room sideways and changes nothing vertically.
          */
         iconOnlyHeader: Boolean = false,
+        /** Small fixed-size text below the number; null preserves the original layout exactly. */
+        unitBelow: String? = null,
     ) {
         // The header comes first because the number's box is what it leaves behind. It is cached
         // and depends on nothing the number does, so this is a reorder rather than extra work.
@@ -378,6 +389,7 @@ object FieldRenderer {
             iconOnly = iconOnlyHeader,
         )
         val pad = edgePadding(context)
+        val unit = unitBelow?.let { unit(context, it, primaryColor) }
 
         // What the number actually gets on screen, from the view Karoo reports. The layout puts
         // the header above it and pads the other three sides; see numeric_field.xml.
@@ -386,7 +398,7 @@ object FieldRenderer {
         // The header always takes its own height off the top, and the number always gets that
         // back as VIEW padding below. That pairing is what makes the clearance survive a
         // [ViewConfig.viewSize] that does not match the view -- see [render]'s note on it.
-        val fullBox = viewHeight - valueBottomPad(context) - header.height
+        val fullBox = viewHeight - (unit?.height ?: valueBottomPad(context)) - header.height
 
         val numberPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             applyFont(context, font)
@@ -533,7 +545,7 @@ object FieldRenderer {
         // The bottom is its own number, not sidePad reused: it is the gap fullBox was computed
         // against, and the two have to be the same or the raster is measured for one box and
         // fitted into another.
-        val bottomPad = (valueBottomPad(context) - margin).coerceAtLeast(0)
+        val bottomPad = ((unit?.height ?: valueBottomPad(context)) - margin).coerceAtLeast(0)
         for (id in BITMAP_IDS) {
             views.setViewPadding(id, sidePad, topPad, sidePad, bottomPad)
         }
@@ -547,6 +559,16 @@ object FieldRenderer {
             views.setViewVisibility(id, if (id == target) View.VISIBLE else View.GONE)
         }
         views.setImageViewBitmap(target, bitmap)
+
+        val unitTarget = when (config.alignment) {
+            Alignment.LEFT -> R.id.unit_start
+            Alignment.CENTER -> R.id.unit_center
+            Alignment.RIGHT -> R.id.unit_end
+        }
+        for (id in UNIT_IDS) {
+            views.setViewVisibility(id, if (unit != null && id == unitTarget) View.VISIBLE else View.GONE)
+        }
+        if (unit != null) views.setImageViewBitmap(unitTarget, unit)
 
         // The header is aligned by the layout, so pick the copy sitting at the right edge --
         // [headerAlignment] when the caller wants it somewhere other than where the number is.
@@ -677,6 +699,33 @@ object FieldRenderer {
         if (bounds.height() > 0) paint.textSize = labelHeight * labelHeight / bounds.height()
         return paint
     }
+
+    /** A content-sized, cached unit line with the same edge alignment as the value above it. */
+    private fun unit(context: Context, text: String, color: Int): Bitmap =
+        unitCache.getOrPut(UnitKey(text, color)) {
+            val density = context.resources.displayMetrics.density
+            val inkHeight = UNIT_HEIGHT_DP * density
+            val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+                applyFont(context, LABEL_FONT)
+                textSize = inkHeight
+                this.color = color
+                isSubpixelText = true
+            }
+            val bounds = Rect()
+            paint.getTextBounds(CAP_REFERENCE, 0, CAP_REFERENCE.length, bounds)
+            if (bounds.height() > 0) paint.textSize = inkHeight * inkHeight / bounds.height()
+            paint.getTextBounds(text, 0, text.length, bounds)
+
+            val side = edgePadding(context)
+            val top = ceil(UNIT_TOP_GAP_DP * density).toInt()
+            val bottom = valueBottomPad(context)
+            val width = ceil(paint.measureText(text)).toInt() + 2 * side
+            val height = top + bounds.height() + bottom
+            val bitmap = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            canvas.drawText(text, side.toFloat(), top - bounds.top.toFloat(), paint)
+            bitmap
+        }
 
     /**
      * How wide a header bitmap is for [label] -- icon, gap, the label itself and the edge padding

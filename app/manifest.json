@@ -3,11 +3,11 @@
   "packageName": "io.smartycoder.bignum",
   "iconUrl": "https://github.com/vmpg/karoo-bignum/raw/main/docs/icon.png",
   "latestApkUrl": "https://github.com/vmpg/karoo-bignum/releases/latest/download/app-release.apk",
-  "latestVersion": "1.4.1-tpms-test1",
-  "latestVersionCode": 10,
+  "latestVersion": "1.4.1-tpms-test2",
+  "latestVersionCode": 11,
   "developer": "vmpg",
   "description": "Large, bold numeric data fields with optional HR and power zone coloring.",
-  "releaseNotes": "Fork test build: adds native Karoo front and rear TPMS fields displayed in bar.",
+  "releaseNotes": "Fork test build: fixes native TPMS scaling and shows FRONT/REAR with two full-size locale-aware decimals and a separate bar line.",
   "tags": [
     "datafield",
     "numeric"
