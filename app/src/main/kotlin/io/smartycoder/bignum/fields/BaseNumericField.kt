@@ -86,6 +86,13 @@ abstract class BaseNumericField(
     protected open fun onDataPoint(point: DataPoint) = Unit
 
     /**
+     * Optional non-zone warning colour derived from a complete live sample. It goes through the
+     * same TEXT/FILL/OFF presentation as zone colour without pretending the field has HR or power
+     * zones. Preview and test values never call this hook because they are not native samples.
+     */
+    protected open fun alertColor(point: DataPoint): Int? = null
+
+    /**
      * Whether the raised-tail setting applies to this field. Off for a wall clock: "14:35" would
      * split into a big "14" and a small "35", which is how a stopwatch reads, not a time of day.
      */
@@ -263,15 +270,23 @@ abstract class BaseNumericField(
             ?: return Frame(Visual("--", defaultColor, null), null)
         // A rider who turned zone colours off probably means everywhere, including the wedge.
         val wedgeValue = if (mode != ZoneColorMode.OFF) wedge(raw) else null
-        val zone = zoneKind
+        val alert = if (
+            mode != ZoneColorMode.OFF &&
+            state is StreamState.Streaming &&
+            !(testMode && demoInTestMode)
+        ) alertColor(state.dataPoint) else null
+        val activeColor = alert ?: zoneKind
             ?.takeIf { mode != ZoneColorMode.OFF }
             // raw, not display: zones are defined on the value the stream carries. A field that
             // shows W/kg derived from watts still has its zone decided by those watts.
             ?.let { ZoneColors.color(it, raw, profile) }
             ?: return Frame(Visual(text, defaultColor, null), wedgeValue)
         return when (mode) {
-            ZoneColorMode.FILL -> Frame(Visual(text, ZoneColors.onColor(zone), zone), wedgeValue)
-            else -> Frame(Visual(text, zone, null), wedgeValue)
+            ZoneColorMode.FILL -> Frame(
+                Visual(text, ZoneColors.onColor(activeColor), activeColor),
+                wedgeValue,
+            )
+            else -> Frame(Visual(text, activeColor, null), wedgeValue)
         }
     }
 

@@ -389,7 +389,9 @@ object FieldRenderer {
             iconOnly = iconOnlyHeader,
         )
         val pad = edgePadding(context)
-        val unit = unitBelow?.let { unit(context, it, primaryColor) }
+        // A TEXT-mode warning colours only the number. The fixed unit remains ordinary ink;
+        // on a filled field it switches with the header to contrasting black or white.
+        val unit = unitBelow?.let { unit(context, it, onBackground ?: Theme.textColor(context)) }
 
         // What the number actually gets on screen, from the view Karoo reports. The layout puts
         // the header above it and pads the other three sides; see numeric_field.xml.

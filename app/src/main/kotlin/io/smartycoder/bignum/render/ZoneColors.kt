@@ -26,6 +26,9 @@ object ZoneColors {
     private const val ANAEROBIC = 0xFFD60404.toInt()
     private const val NEUROMUSCULAR = 0xFFB700A2.toInt()
 
+    /** Existing Karoo red reused for non-zone warnings such as native TPMS low pressure. */
+    fun warningRed(): Int = ANAEROBIC
+
     // The arrays stay separate, and their ORDER is the thing each one owns: which effort a scale
     // puts at which zone is exactly where the two diverge.
     private val hrPalette = intArrayOf(
