@@ -6,6 +6,15 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Each entry here should match the `releaseNotes` field in `app/manifest.json`, which is what the
 Karoo shows in its own update flow.
 
+## [1.4.1-tpms-test3] - 2026-10-07
+
+### Added
+
+- FRONT and REAR now show the existing Karoo red independently when the native pressure alarm is
+  enabled and pressure is strictly below `target - range`. The exact limit stays normal; a
+  disabled alarm suppresses the warning. The global colour mode still selects number, field fill,
+  or no colour, and the confirmed test2 pressure display remains unchanged.
+
 ## [1.4.1-tpms-test2] - 2026-10-07
 
 ### Fixed
