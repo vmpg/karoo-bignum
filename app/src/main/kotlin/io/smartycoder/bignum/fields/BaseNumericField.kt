@@ -46,7 +46,7 @@ abstract class BaseNumericField(
     // project has no Robolectric, so there is no live Context to hand a real KarooSystemService,
     // and compute() -- the one thing that test drives -- never touches this field anyway. Every
     // real field always constructs with a non-null instance; see the `!!` uses in frameFlow.
-    private val karoo: KarooSystemService?,
+    protected val karoo: KarooSystemService?,
 ) : DataTypeImpl(extension, typeId) {
 
     abstract val upstreamTypeId: String
@@ -119,6 +119,13 @@ abstract class BaseNumericField(
      */
     open fun displayValue(raw: Double, profile: UserProfile?): Double? = raw
 
+    /**
+     * Stream that drives this field. Most fields consume one Karoo type; a composite field can
+     * combine several sources into one synthetic point without replacing the rendering or
+     * colour pipeline.
+     */
+    protected open fun dataFlow(): Flow<StreamState> = karoo!!.streamDataFlow(upstreamTypeId)
+
     /** Wedge behind the number for this field's [raw] value. Null for every field but Grade. */
     open fun wedge(raw: Double): Wedge? = null
 
@@ -151,8 +158,8 @@ abstract class BaseNumericField(
      */
     internal fun frameFlow(context: Context, preview: Boolean): Flow<Pair<Frame, Appearance>> {
         val needsProfile = zoneKind != null || formatNeedsProfile()
-        val dataFlow = karoo!!.streamDataFlow(upstreamTypeId)
-        val profileFlow = if (needsProfile) karoo.consumerFlow<UserProfile>() else flowOf<UserProfile?>(null)
+        val dataFlow = dataFlow()
+        val profileFlow = if (needsProfile) karoo!!.consumerFlow<UserProfile>() else flowOf<UserProfile?>(null)
 
         return combine(
             dataFlow,

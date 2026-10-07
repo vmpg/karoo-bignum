@@ -3,11 +3,11 @@
   "packageName": "io.smartycoder.bignum",
   "iconUrl": "https://github.com/vmpg/karoo-bignum/raw/main/docs/icon.png",
   "latestApkUrl": "https://github.com/vmpg/karoo-bignum/releases/latest/download/app-release.apk",
-  "latestVersion": "1.4.1-tpms-test3",
-  "latestVersionCode": 12,
+  "latestVersion": "1.4.1-di2-test1",
+  "latestVersionCode": 13,
   "developer": "vmpg",
   "description": "Large, bold numeric data fields with optional HR and power zone coloring.",
-  "releaseNotes": "Fork test build: native FRONT/REAR TPMS turns red below target minus range when its native pressure alarm is enabled.",
+  "releaseNotes": "Fork test build: Di2 - Gears shows the current front and rear teeth and uses the existing red warning colour while Ki2 reports an upcoming synchro shift.",
   "tags": [
     "datafield",
     "numeric"
