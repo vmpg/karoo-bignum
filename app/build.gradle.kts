@@ -23,8 +23,8 @@ android {
         // nothing here needs more -- getFont() and fontVariationSettings are both API 26.
         minSdk = 26
         targetSdk = 34
-        versionCode = 12
-        versionName = "1.4.1-tpms-test3"
+        versionCode = 13
+        versionName = "1.4.1-di2-test1"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 

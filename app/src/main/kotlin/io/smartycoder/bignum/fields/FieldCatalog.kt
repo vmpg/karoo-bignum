@@ -153,6 +153,9 @@ object FieldCatalog {
             // TirePressureField converts the native tenths-of-kPa reading to fixed two-decimal bar.
             TirePressureField(extension, "tirePressureFront", karoo, DataType.Type.TIRE_PRESSURE_FRONT, "FRONT", previewValue = 3670.0),
             TirePressureField(extension, "tirePressureRear", karoo, DataType.Type.TIRE_PRESSURE_REAR, "REAR", previewValue = 3810.0),
+
+            // Standard Karoo gear teeth plus Ki2's public, already-derived upcoming shift state.
+            Di2GearsField(extension, karoo),
         )
     }
 }

@@ -98,6 +98,9 @@
     <DataType displayName="@string/df_tpms_front" graphical="true" icon="@drawable/ic_tire_pressure" typeId="tirePressureFront" description="@string/df_tpms_front_desc"/>
     <DataType displayName="@string/df_tpms_rear" graphical="true" icon="@drawable/ic_tire_pressure" typeId="tirePressureRear" description="@string/df_tpms_rear_desc"/>
 
+    <!-- Di2 validation field -->
+    <DataType displayName="@string/df_di2_gears" graphical="true" icon="@drawable/ic_bignum" typeId="di2Gears" description="@string/df_di2_gears_desc"/>
+
     <!-- Composite -->
     <DataType displayName="@string/df_hud" graphical="true" icon="@drawable/ic_bignum" typeId="hud" description="@string/df_hud_desc"/>
 </ExtensionInfo>

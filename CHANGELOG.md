@@ -6,6 +6,16 @@ versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 Each entry here should match the `releaseNotes` field in `app/manifest.json`, which is what the
 Karoo shows in its own update flow.
 
+## [1.4.1-di2-test1] - 2026-10-07
+
+### Added
+
+- **Di2 - Gears** combines the standard Karoo front- and rear-teeth streams as `36-17`. Missing
+  or invalid teeth remain unavailable instead of being reconstructed from gear indices.
+- The field reads Ki2's public `FIELD_DI2_UPCOMING_SYNCHRO_SHIFT` value. Ki2 values 1 and 2 use
+  BigNum's existing red warning colour; 0 returns to the normal colour. BigNum adds no Shimano,
+  direction, timing, prediction, or reset logic.
+
 ## [1.4.1-tpms-test3] - 2026-10-07
 
 ### Added

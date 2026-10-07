@@ -193,4 +193,6 @@
     <string name="df_tpms_front_desc">Native Karoo front tire pressure in bar.</string>
     <string name="df_tpms_rear">TPMS - Rear</string>
     <string name="df_tpms_rear_desc">Native Karoo rear tire pressure in bar.</string>
+    <string name="df_di2_gears">Di2 - Gears</string>
+    <string name="df_di2_gears_desc">Current front and rear gear teeth from the Karoo shifting streams.</string>
 </resources>
